@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DouPHP 管理中心 - 品牌管理 </title>
+    <meta name="Copyright" content="Douco Design." />
+    <link href="__STATIC__/admin/css/public.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/global.js"></script>
+</head>
+<body>
+<div id="dcWrap">
+    {include file="public/header" /}
+    <!-- dcHead 结束 -->
+    {include file="public/left" /}
+    <div id="dcMain">
+        <!-- 当前位置 -->
+        <div id="urHere">DouPHP 管理中心<b>></b><strong>品牌管理</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+        <h3><a href="{:url('cate/add')}" class="actionBtn add">添加品牌</a>品牌管理</h3>
+        <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+            <tr>
+                <th width="120" align="left">品牌名称</th>
+                <th align="left">品牌网址</th>
+                <th align="left">品牌描述</th>
+                <th align="left">品牌logo</th>
+                <th width="60" align="center">排序</th>
+                <th width="60" align="center">品牌状态</th>
+                <th width="80" align="center">操作</th>
+            </tr>
+            {foreach $data as $key=>$vo}
+            <tr>
+                <td align="left "> <a href="product.php?cat_id=1">{$vo.pin_name}</a></td>
+                <td>{$vo.pin_url}</td>
+                <td>{$vo.pin_desc}</td>
+                <td><img src="" alt=""></td>
+                <td align="center">{$vo.pin_order}</td>
+                <td>
+                    {if $vo.pin_status==1}
+                    <button>显示</button>
+                    {else}
+                    <button>不显示</button>
+                    {/if}
+                </td>
+                <td align="center"><a href="product_category.php?rec=edit&cat_id=1">编辑</a> | <a href="product_category.php?rec=del&cat_id=1">删除</a></td>
+            </tr>
+            {/foreach}
+        </table>
+    </div>
+    </div>
+    <div class="clear"></div>
+    <div id="dcFooter">
+        <div id="footer">
+            <div class="line"></div>
+            <ul>
+                版权所有 © 2013-2015 漳州豆壳网络科技有限公司，并保留所有权利。
+            </ul>
+        </div>
+    </div><!-- dcFooter 结束 -->
+    <div class="clear"></div> </div>
+</body>
+</html>

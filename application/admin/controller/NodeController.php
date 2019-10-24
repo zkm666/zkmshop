@@ -11,7 +11,7 @@ use app\admin\model\NodeModel;
 use app\admin\service\NodeService;
 use think\Controller;
 
-class NodeController extends Controller
+class NodeController extends CommonController
 {
     public function show()
     {

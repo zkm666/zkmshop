@@ -16,7 +16,7 @@
     <div id="dcMain">
         <!-- 当前位置 -->
         <div id="urHere">DouPHP 管理中心<b>></b><strong>品牌管理</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
-        <h3><a href="{:url('cate/add')}" class="actionBtn add">添加品牌</a>品牌管理</h3>
+        <h3><a href="{:url('brand/add')}" class="actionBtn add">添加品牌</a>品牌管理</h3>
         <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
             <tr>
                 <th width="120" align="left">品牌名称</th>
@@ -27,15 +27,17 @@
                 <th width="60" align="center">品牌状态</th>
                 <th width="80" align="center">操作</th>
             </tr>
-            {foreach $data as $key=>$vo}
+            {foreach $brand as $key=>$vo}
             <tr>
-                <td align="left "> <a href="product.php?cat_id=1">{$vo.pin_name}</a></td>
-                <td>{$vo.pin_url}</td>
-                <td>{$vo.pin_desc}</td>
-                <td><img src="" alt=""></td>
-                <td align="center">{$vo.pin_order}</td>
+                <td align="left "> <a href="product.php?cat_id=1">{$vo.brand_name}</a></td>
+                <td>{$vo.brand_url}</td>
+                <td>{$vo.brand_desc}</td>
+                <td align="center">
+                    <img src="http://www.ehheng.com/{$vo.brand_logo}" alt="" width="50px" height="50px">
+                </td>
+                <td>{$vo.brand_order}</td>
                 <td>
-                    {if $vo.pin_status==1}
+                    {if $vo.brand_status==1}
                     <button>显示</button>
                     {else}
                     <button>不显示</button>

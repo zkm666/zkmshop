@@ -11,7 +11,7 @@ use think\Controller;
 use think\Db;
 use think\facade\Request;
 
-class CateController extends Controller
+class CateController extends CommonController
 {
     public function show(){
         $cate=new CateModel();

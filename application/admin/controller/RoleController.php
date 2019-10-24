@@ -12,7 +12,7 @@ use app\admin\model\RoleModel;
 use app\admin\service\NodeService;
 use think\Controller;
 
-class RoleController extends Controller
+class RoleController extends CommonController
 {
     public function show()
     {

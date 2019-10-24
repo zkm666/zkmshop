@@ -9,7 +9,7 @@ namespace app\admin\controller;
 
 use think\Controller;
 
-class ShowController extends Controller
+class ShowController extends CommonController
 {
     public function show()
     {

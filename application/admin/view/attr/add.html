@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DouPHP 管理中心 - 属性管理 </title>
+    <meta name="Copyright" content="Douco Design." />
+    <link href="__STATIC__/admin/css/public.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/global.js"></script>
+    <script>
+        $(function(){
+            $(".attr_type").click(function(){
+                var attr=$(this).val();
+                if(attr==1){
+                    $("textarea[name='attr_select']").attr("disabled",false);
+                }else{
+                    $("textarea[name='attr_select']").attr("disabled",true);
+                }
+            });
+            $("select[name='type_id']").change(function(){
+                var obj=$(this);
+                var type_id=$(this).val();
+                $.ajax({
+                    type:"post",
+                    url:"{:url('type/getType')}",
+                    data:{
+                        type_id:type_id
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status==1){
+                            html="";
+                            $.each(data.type,function(k,v){
+                                html+="<option value=''>"+ v+"</option>";
+                            });
+                            $("select[name=group_name]").html(html);
+                            obj.parents("tr").attr("hidden",false);
+                        }else{
+                            obj.parents("tr").attr("hidden",true);
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<div id="dcWrap">
+    {include file="public/header"}
+    {include file="public/left"}
+    <div id="dcMain">
+        <!-- 当前位置 -->
+        <div id="urHere">DouPHP 管理中心<b>></b><strong>属性管理</strong> </div>   <div id="manager" class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+        <h3><a href="{:url('attr/show',['type_id'=>$type_id])}" class="actionBtn">返回列表</a>属性管理</h3>
+        <form action="" method="post">
+            <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                <tr>
+                    <td width="100" align="right">属性名称</td>
+                    <td>
+                        <input type="text" name="attr_name" size="40" class="inpMain" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">所属商品类型</td>
+                    <td>
+                        <select name="type_id">
+                            <option value="0">请选择...</option>
+                            {foreach $attr as $key=>$vo }
+                            <option value="{$vo.type_id}">{$vo.type_name}</option>
+                            {/foreach}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">属性分组</td>
+                    <td>
+                        <select name="group_name">
+                            <option value="" >请选择...</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100" align="right">是否参与购买</td>
+                    <td>
+                        <input type="radio" name="attr_type" size="40" value="0" class="attr_type" checked/>不参与
+                        <input type="radio" name="attr_type" size="40" value="1" class="attr_type"/>参与
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100" align="right">该属性值录入方式</td>
+                    <td>
+                        <input type="radio" name="attr_input_type" size="40" checked value="0" class="attr_type"/>手工录入
+                        <input type="radio" name="attr_input_type" size="40" value="1" class="attr_type"/>从下面列表中选择
+                        <input type="radio" name="attr_input_type" size="40" value="-1" class="attr_type"/>复选属性
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100" align="right">可选值列表</td>
+                    <td>
+                        <textarea name="attr_select" cols="30" rows="5" disabled></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="hidden" name="type_id" value="{$type_id}"/>
+                        <input type="submit" class="btn" value="提交"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    </div>
+    <div class="clear"></div>
+    <div id="dcFooter">
+        <div id="footer">
+            <div class="line"></div>
+            <ul>
+                版权所有 © 2013-2015 漳州豆壳网络科技有限公司，并保留所有权利。
+            </ul>
+        </div>
+    </div><!-- dcFooter 结束 -->
+    <div class="clear"></div> </div>
+</body>
+</html>

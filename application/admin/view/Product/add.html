@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DouPHP 管理中心 - 商品货品管理 </title>
+    <meta name="Copyright" content="Douco Design." />
+    <link href="__STATIC__/admin/css/public.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/global.js"></script>
+</head>
+<script>
+    $(function(){
+        $(document).on("click",".clone",function(){
+            var a=$(this).parents("tr");
+            var next= a.clone(true);
+            a.after(next);//复制当前点击的节点，并将它追加到《ul》元素中，当添加参数时复制它的事件
+            next.find("a").html("[-]").attr("class","delete");
+            var tr_num = $("tr").size();
+            next.find("select").attr("name","attr_name["+tr_num+"][attr_select][]");
+            next.find("input[name='attr_name[0][product_num]']").attr("name","attr_name["+tr_num+"][product_num]");
+            next.find("input[name='attr_name[0][product_save]']").attr("name","attr_name["+tr_num+"][product_save]");
+        });
+        $(document).on("click",".delete",function(){
+            $(this).parents("tr").first().remove();
+            //复制当前点击的节点，并将它追加到《ul》元素中，当添加参数时复制它的事件
+        });
+    })
+</script>
+<body>
+<div id="dcWrap">
+    {include file="public/header"}
+    {include file="public/left"}
+    <div id="dcMain">
+        <!-- 当前位置 -->
+        <div id="urHere">DouPHP 管理中心<b>></b><strong>商品货品管理</strong> </div>   <div id="manager" class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+        <h3><a href="{:url('product/show',['goods_id'=>$goods_id])}" class="actionBtn">返回列表</a>商品类型管理</h3>
+        <form action="" method="post">
+        <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+            <tr>
+                <th><a class='clone'>[+]</a></th>
+                {foreach $product as $key=>$val}
+                <th width="30" align="center">{$key}</th>
+                <th>
+                    <select name="attr_name[0][attr_select][]" id="">
+                        <option value="0">请选择...</option>
+                        {foreach $val as $k=>$v}
+                        <option value="{$v.goods_attr_id}">{$v.attr_select}</option>
+                        {/foreach}
+                    </select>
+                </th>
+                {/foreach}
+                <th width="30" align="center">货号</th>
+                <th align="left"><input type="text" name="attr_name[0][product_num]"></th>
+                <th width="30" align="center">库存</th>
+                <th align="left"><input type="text" name="attr_name[0][product_save]"></th>
+            </tr>
+            <tr>
+                <td id="tbody-goodsAttr" colspan="2" style="padding:0">
+                    <table width="100%" id="attrTable">
+                        <tbody class="aa">
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="9" align="center">
+                    <input type="hidden" name="goods_id" value="{$goods_id}">
+                    <input class="btn" type="submit" value="保存" />
+                </td>
+            </tr>
+        </table>
+        </form>
+    </div>
+    </div>
+    <div class="clear"></div>
+    <div id="dcFooter">
+        <div id="footer">
+            <div class="line"></div>
+            <ul>
+                版权所有 © 2013-2015 漳州豆壳网络科技有限公司，并保留所有权利。
+            </ul>
+        </div>
+    </div><!-- dcFooter 结束 -->
+    <div class="clear"></div> </div>
+</body>
+</html>

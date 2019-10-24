@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DouPHP 管理中心 - 商品货品管理 </title>
+    <meta name="Copyright" content="Douco Design." />
+    <link href="__STATIC__/admin/css/public.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/global.js"></script>
+</head>
+<body>
+<div id="dcWrap">
+    {include file="public/header"}
+    {include file="public/left"}
+    <div id="dcMain">
+        <!-- 当前位置 -->
+        <div id="urHere">DouPHP 管理中心<b>></b><strong>商品货品管理</strong> </div>   <div id="manager" class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+        <h3><a href="{:url('product/add',['goods_id'=>$goods_id])}" class="actionBtn">添加货品</a>商品类型管理</h3>
+        <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+            <th align="center">货品名</th>
+            <th align="center">货号</th>
+            <th align="center">库存</th>
+            {foreach $product as $key=>$val}
+            <tr>
+                <td align="center">{$val.goods_attr_id}</td>
+                <td align="center">{$val.product_num}</td>
+                <td align="center">{$val.product_save}</td>
+            </tr>
+            {/foreach}
+        </table>
+    </div>
+    </div>
+    <div class="clear"></div>
+    <div id="dcFooter">
+        <div id="footer">
+            <div class="line"></div>
+            <ul>
+                版权所有 © 2013-2015 漳州豆壳网络科技有限公司，并保留所有权利。
+            </ul>
+        </div>
+    </div><!-- dcFooter 结束 -->
+    <div class="clear"></div> </div>
+</body>
+</html>

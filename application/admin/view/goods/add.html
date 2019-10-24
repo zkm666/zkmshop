@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DouPHP 管理中心 - 添加分类 </title>
+    <meta name="Copyright" content="Douco Design." />
+    <link href="__STATIC__/admin/css/public.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="__STATIC__/admin/js/jquery.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/global.js"></script>
+    <script type="text/javascript" charset="utf-8" src="__STATIC__/ueditor/ueditor.config.js"></script>
+    <script>
+        $(function(){
+            $(".sell_price").click(function(){
+                var sell=$(this).val();
+                if(sell==1){
+                    $("input[name='sell_price']").attr("disabled",false);
+                    $("input[name='sell_start_time']").attr("disabled",false);
+                    $("input[name='sell_end_time']").attr("disabled",false);
+                }else{
+                    $("input[name='sell_price']").attr("disabled",true);
+                    $("input[name='sell_start_time']").attr("disabled",true);
+                    $("input[name='sell_end_time']").attr("disabled",true);
+                }
+
+            });
+            $("#sell_btn").click(function () {
+                var own_sell=parseInt($("input[name='own_price']").val());
+                if(own_sell==0){
+                    alert("请输入价格");
+                    return false;
+                }
+                $.ajax({
+                    type:"post",
+                    url:"{:url('goods/market')}",
+                    data:{
+                        own_sell:own_sell
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        if(data.status==1){
+                            $("#market").val(data.market_price);
+                        }
+                    }
+                })
+            })
+            $("#ceil").click(function () {
+                var a=$("input[name='market_price']").val();
+                var market_price=Math.ceil(a);
+                $("input[name='market_price']").val(market_price);
+            });
+            $("#type_id").change(function(){
+                var type_id=$(this).val();
+                $.ajax({
+                    type:"post",
+                    url:"{:url('goods/attr')}",
+                    data:{
+                        type_id:type_id
+                    },
+                    dataType:"json",
+                    success:function(data){
+                        html="";
+                        if(data.status==1){
+                            $.each(data.attr,function(k,v){
+                                if(v.attr_input_type==0){
+                                    html+="<tr class='type'>";
+                                    if(v.attr_type==1){
+                                        html+="<td align='left'  width='102' name='"+ v.attr_id+"' valign='top'><a class='clone'>[+]</ a>"+ v.attr_name+"</td>";
+                                    }else{
+                                        html+="<td align='left'  width='102' name='"+ v.attr_id+"' valign='top'>"+ v.attr_name+"</td>";
+                                    }
+                                    html+="<td>";
+                                    html+="<input type='hidden' name='attr_id[]' value="+ v.attr_id+">";
+                                    html+="<input type='hidden' name='attr_name[]' value="+ v.attr_name+">";
+                                    html+="<input name='attr_select[]'  type='text' size='20'>";
+                                    html+="&nbsp;&nbsp;属性价格：<input name='attr_price[]'  type='text' size='10'>";
+                                    html+="</td>";
+                                    html+="</tr>";
+                                }else{
+                                    html+="<tr class='type'>";
+                                    if(v.attr_type==1){
+                                        html+="<td align='left'  width='102' name='"+ v.attr_id+"' valign='top'><a class='clone'>[+]</ a>"+ v.attr_name+"</td>";
+                                    }else{
+                                        html+="<td align='left'  width='102' name='"+ v.attr_id+"' valign='top'>"+ v.attr_name+"</td>";
+                                    }
+                                    html+="<td>";
+                                    html+="<input type='hidden' name='attr_id[]' value="+ v.attr_id+">";
+                                    html+="<input type='hidden' name='attr_name[]' value="+ v.attr_name+">";
+                                    html+="<select name='attr_select[]'>";
+                                    html+="<option value='0'>请选择...</option>";
+                                    $.each(v.attr_select, function(key,val){
+                                        html+="<option>"+val+"</option>";
+                                    });
+                                    html+="</select>";
+                                    html+="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                    html+="属性价格：<input name='attr_price[]'  type='text' size='10'>";
+                                    html+="</td>";
+                                    html+="</tr>";
+                                }
+                            })
+                        }
+                        $(".aa").html(html);
+                    },
+                    error: function () {
+                        $(".aa").empty();
+                    }
+                })
+            });
+            //属性的加减
+            $(document).on("click",".clone",function(){
+                var a=$(this).parents("tr").first().clone(true);
+                a.find("a").html("[-]").attr("class","delete");
+                a.insertAfter($(this).parents("tr").first());//复制当前点击的节点，并将它追加到《ul》元素中，当添加参数时复制它的事件
+            });
+            $(document).on("click",".delete",function(){
+                $(this).parents("tr").first().remove();
+                //复制当前点击的节点，并将它追加到《ul》元素中，当添加参数时复制它的事件
+            });
+        })
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            $(".tab li").click(function(){
+                $(".tab li").eq($(this).index()).addClass("activ").siblings().removeClass("activ");
+                $(".tabCon div").hide().eq($(this).index()).show();
+            })
+        });
+    </script>
+    <style>
+        /* 选项卡 */
+
+        a {
+            color:#111111;
+            text-decoration:none;
+            -webkit-transition:color 0.2s linear;
+            -moz-transition:color 0.2s linear;
+            -o-transition:color 0.2s linear;
+            transition:color 0.2s linear
+        }
+        a:focus , a:link, a:active { outline:none}
+        a:hover { color:#F30}
+        ol, ul, li{	list-style: none}
+        html,body { margin:0; padding:0; height:100%}
+        .table_card { width:100%; margin:0 auto;margin-top: 20px}
+        .table_card .tab { height:37px; font-size:14px; border-bottom:1px #e1e1e1 solid}
+        .table_card .tab li { float:left; height:36px; line-height:36px; padding:0 25px; margin-right:5px; background:#f0f0f0; border-top:1px #e1e1e1 solid; border-left:1px #e1e1e1 solid; border-right:1px #e1e1e1 solid;}
+        .table_card .tab li:hover { height:37px; background:#fff; color:#333; cursor:pointer}
+        .table_card .activ { height:37px !important; background:#fff !important; color:#333}
+        .table_card .tabCon { background:#fff; padding:0px; border-bottom:1px #e1e1e1 solid; border-left:1px #e1e1e1 solid; border-right:1px #e1e1e1 solid;}
+        .table_card .tabCon div { display:none}
+        .table_card .tabCon .on { display:block}
+        .newslist01 { font-size:13px; }
+        .newslist01 li { line-height:36px;}
+        .newslist01 li .ding { color:#F30; margin-left:5px}
+        .newslist01 li .time { float:right; font-size:12px; color:#888}
+    </style>
+</head>
+<body>
+<div id="dcWrap">
+    {include file="public/header" /}
+    <!-- dcHead 结束 -->
+    {include file="public/left" /}
+    <div id="dcMain">
+        <!-- 当前位置 -->
+        <div id="urHere">DouPHP 管理中心<b>></b><strong>添加商品</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+        <h3><a href="{:url('goods/show')}" class="actionBtn">返回列表</a>添加商品</h3>
+        <div class="warpbox">
+            <!--# 选项卡 -->
+            <form action="" method="post">
+            <div class="table_card">
+                <ul class="tab">
+                    <li class="activ">通用信息</li>
+                    <li>详细信息</li>
+                    <li>其他信息</li>
+                    <li>商品属性</li>
+                    <li>商品相册</li>
+                </ul>
+                <div class="tabCon">
+                    <div class="on">
+                        <ul class="newslist01">
+
+                                <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                                    <tr>
+                                        <td width="80" align="right">商品名称</td>
+                                        <td>
+                                            <input type="text" name="goods_name" value="" size="40" class="inpMain" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80" align="right">商品货号</td>
+                                        <td>
+                                            <input type="text" name="goods_num" value="" size="40" class="inpMain" />
+                                            <span style="color: grey">如果您不输入商品货号，系统将自动生成一个唯一的货号。</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">商品分类</td>
+                                        <td>
+                                            <select name="cate_id">
+                                                <option value="0">顶级分类</option>
+                                                {foreach $cateOrder as $key=>$vo }
+                                                <option value="{$vo.cate_id}">
+                                                    {if condition="$vo['level'] neq 0"}|{/if}
+                                                    <?php echo str_repeat('--',$vo['level']);?>
+                                                    {$vo.cate_name}
+                                                </option>
+                                                {/foreach}
+                                            </select>
+                                            </span><span style="color: red">*</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">商品品牌</td>
+                                        <td>
+                                            <select name="brand_id" >
+                                                <option value="0">请选择</option>
+                                                {foreach $brand as $k=>$v}
+                                                <option value="{$v.brand_id}">{$v.brand_name}</option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">本店售价</td>
+                                        <td>
+                                            <input type="text" name="own_price" value="0" size="40" class="inpMain" />
+                                            <input type="button" value="按市场价计算" id="sell_btn" class="btn">
+                                            </span><span style="color: red">*</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">市场售价</td>
+                                        <td>
+                                            <input type="text" name="market_price" value="0" size="40" class="inpMain"
+                                            id="market"/>
+                                            <input type="button" value="取整数" id="ceil" class="btn">
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><input type="checkbox" class="sell_price" value="1">促销价</td>
+                                        <td>
+                                            <input type="text" name="sell_price" value="0" size="5" class="inpMain" disabled/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">促销日期</td>
+                                        <td>
+                                            <input type="date" name="sell_start_time"  size="5"  disabled/>-
+                                            <input type="date" name="sell_end_time"  size="5"  disabled/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">上传商品图片</td>
+                                        <td>
+                                            <input type="file" name="goods_img" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">上传商品缩略图</td>
+                                        <td>
+                                            <input type="file" name="goods_small_img"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="newslist01">
+
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="newslist01">
+                                <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                                    <tr>
+                                        <td width="80" align="right">商品重量</td>
+                                        <td>
+                                            <input type="text" name="goods_weight" value="" size="40" class="inpMain" />千克
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80" align="right">商品库存</td>
+                                        <td>
+                                            <input type="text" name="goods_store" value="" size="40" class="inpMain" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80" align="right">商品警告库存</td>
+                                        <td>
+                                            <input type="text" name="goods_warn_store" value="" size="40" class="inpMain" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80" align="right">加入推荐</td>
+                                        <td>
+                                            <input type="checkbox" name="is_per" value="1"/>精品
+                                            <input type="checkbox" name="is_new" value="1" />新品
+                                            <input type="checkbox" name="is_hot" value="1"/>热销
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80" align="right">上架</td>
+                                        <td>
+                                            <input type="checkbox" name="goods_status" value="1"/>打勾表示允许销售，否则不允许销售。
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80" align="right">是否免运费</td>
+                                        <td>
+                                            <input type="checkbox" name="is_free_shipping" value="1"/>打勾表示此商品不会产生运费花销，否则按照正常运费计算。
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80" align="right">推荐排序</td>
+                                        <td>
+                                            <input type="checkbox" name="goods_order" value="1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">商品关键词</td>
+                                        <td>
+                                            <input type="text" name="goods_keywords" value="" size="40" class="inpMain" />
+                                            用空格分隔
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">商品简单描述</td>
+                                        <td>
+                                            <textarea name="goods_desc" cols="35" rows="5"></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">商家备注</td>
+                                        <td>
+                                            <textarea name="goods_remarks" cols="35" rows="5"></textarea>
+                                        </td>
+                                    </tr>
+                                </table>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="newslist01">
+                                <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+                                    <tr>
+                                        <td width="80" align="right">商品类型</td>
+                                        <td>
+                                            <select name="type_id" id="type_id">
+                                                <option value="">请选择...</option>
+                                                {foreach $type as $k1=>$v1}
+                                                <option value="{$v1.type_id}">{$v1.type_name}</option>
+                                                {/foreach}
+                                            </select>
+                                            请选择商品的所属类型，进而完善此商品的属性
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="tbody-goodsAttr" colspan="2" style="padding:0">
+                                            <table width="100%" id="attrTable">
+                                                <tbody class="aa">
+
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="newslist01">
+                            <li>第五</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+                <tr>
+                    <td>
+                        <input class="btn" type="submit" value="提交" />
+                    </td>
+                </tr>
+            </form>
+            <!--#@ 选项卡 -->
+        </div>
+
+    </div>
+    </div>
+    <div class="clear"></div>
+    <div id="dcFooter">
+        <div id="footer">
+            <div class="line"></div>
+            <ul>
+                版权所有 © 2013-2015 漳州豆壳网络科技有限公司，并保留所有权利。
+            </ul>
+        </div>
+    </div><!-- dcFooter 结束 -->
+    <div class="clear"></div> </div>
+</body>
+</html>
